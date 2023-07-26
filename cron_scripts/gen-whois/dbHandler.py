@@ -8,7 +8,7 @@
 
   .. moduleauthor:: Tim Evens <tim@evensweb.com>
 """
-import psycopg2 as py
+import clickhouse_driver as py
 from time import time
 
 class dbHandler:
@@ -33,11 +33,13 @@ class dbHandler:
         """
          Connect to database
         """
-        try:
-            self.conn = py.connect(user=user, password=pw,
-                               host=host,
-                               database=database)
+        self.user = user
+        self.pw = pw
+        self.host = host
+        self.database = database
 
+        try:
+            self.conn = py.connect(f"clickhouse://{self.user}:{self.pw}@{self.host}/{self.database}?max_query_size=1048576")
             self.cursor = self.conn.cursor()
 
         except (py.ProgrammingError) as err:
@@ -54,17 +56,17 @@ class dbHandler:
             self.conn.close()
             self.conn = None
 
-    def createTable(self, tableName, tableSchema, dropIfExists = True):
-        """ Create table schema
+    def dropTable(self, tableName, tableSchema, dropIfExists = True):
+        """ Drop table schema
 
             :param tablename:    The table name that is being created
-            :param tableSchema:  Create table syntax as it would be to create it in SQL
+            :param tableSchema:  Drop table syntax as it would be to drop it in SQL
             :param dropIfExists: True to drop the table, false to not drop it.
 
             :return: True if the table successfully was created, false otherwise
         """
         if (not self.cursor):
-            print("ERROR: Looks like psql is not connected, try to reconnect.")
+            print("ERROR: Looks like clickhouse-client is not connected, try to reconnect.")
             return False
 
         try:
@@ -74,28 +76,28 @@ class dbHandler:
             self.cursor.execute(tableSchema)
 
         except py.ProgrammingError as err:
-            print("ERROR: Failed to create table - " + str(err))
+            print("ERROR: Failed to drop table - " + str(err))
             #raise err
 
 
         return True
 
-    def createTable(self, tableName, tableSchema, dropIfExists = True):
+    def createTable(self, tableName, tableSchema, createIfExists = True):
         """ Create table schema
 
             :param tablename:    The table name that is being created
             :param tableSchema:  Create table syntax as it would be to create it in SQL
-            :param dropIfExists: True to drop the table, false to not drop it.
+            :param createIfExists: True to drop the table, false to not drop it.
 
             :return: True if the table successfully was created, false otherwise
         """
         if (not self.cursor):
-            print("ERROR: Looks like psql is not connected, try to reconnect.")
+            print("ERROR: Looks like clickhouse-client is not connected, try to reconnect.")
             return False
 
         try:
-            if (dropIfExists == True):
-               self.cursor.execute("DROP TABLE IF EXISTS %s" % tableName)
+            if (createIfExists == True):
+               self.cursor.execute("CREATE TABLE IF EXISTS %s" % tableName)
 
             self.cursor.execute(tableSchema)
 
@@ -116,7 +118,7 @@ class dbHandler:
             :return: Returns "None" if error, otherwise array list of rows
         """
         if (not self.cursor):
-            print("ERROR: Looks like psql is not connected, try to reconnect")
+            print("ERROR: Looks like clickhouse-client is not connected, try to reconnect")
             return None
 
         try:
@@ -154,7 +156,7 @@ class dbHandler:
             :return: Returns True if successful, false if not.
         """
         if (not self.cursor):
-            print("ERROR: Looks like psql is not connected, try to reconnect")
+            print("ERROR: Looks like clickhouse-client is not connected, try to reconnect")
             return None
 
         try:
