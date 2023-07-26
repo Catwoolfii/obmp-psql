@@ -53,13 +53,13 @@ def load_export(db, server, rpkiuser, rpkipassword):
         if count > 0:
             query += ','
 
-        asn, prefix_full, max_length = line['asn'], line['prefix'], line['maxLength']
+        origin_as, prefix_full, prefix_len_max  = line['asn'], line['prefix'], line['maxLength']
         # remove the characters "AS", some RPKI vendors include this in their data
-        asn = asn.replace('AS','')
+        origin_as = asn.replace('AS','')
 
         prefix, prefix_len = prefix_full.split('/')[0], prefix_full.split('/')[1]
 
-        query += "('%s'::inet, %d, %d, %d)" % (prefix_full, int(prefix_len), int(max_length), int(asn))
+        query += "('%s'::inet, %d, %d, %d)" % (prefix_full, int(prefix_len_max), int(max_length), int(origin_as))
         count += 1
 
         if (count > 200):    # Bulk insert/upset
