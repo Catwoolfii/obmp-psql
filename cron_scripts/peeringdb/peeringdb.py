@@ -368,7 +368,7 @@ class apiDb:
             return False
 
         # start time
-        t1=time.time()        
+        t1=time.time()
 
         # go through each AS and and grab data
         values_list = []
@@ -433,7 +433,7 @@ class apiDb:
 
             self.cursor.execute (upsert_stmt)
             self.conn.commit()
-        
+
         except (Exception, psycopg2.IntegrityError) as error:
             self.conn.rollback()
             logger.error(f"PSQL error: {error}")
@@ -459,8 +459,8 @@ class apiDb:
               help="Postgres Database name",
               metavar="<string>", default="openbmp")
 @click.option('-s', '--sleep', 'sleep_secs',
-              help="Randomly sleep to delay connections to peeringdb (default 600)",
-              metavar="<int>", default="600")
+              help="Randomly sleep to delay connections to peeringdb (default 60)",
+              metavar="<int>", default="60")
 def main(pghost, pguser, pgpassword, pgdatabase, sleep_secs):
 
     # Add a sleep before connecting to peeringDB
