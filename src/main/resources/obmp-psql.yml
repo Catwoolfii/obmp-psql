@@ -87,6 +87,11 @@ kafka:
   consumer_config:
     bootstrap.servers: "localhost:9092"
 
+    # For SASL authentification:
+    #security.protocol: "SASL_PLAINTEXT"
+    #sasl.mechanism: "SCRAM-SHA-256"
+    #sasl.jaas.config: org.apache.kafka.common.security.scram.ScramLoginModule required username="openbmp" password="openbmp";
+
     group.id  : "obmp-psql-consumer"
     client.id : "obmp-psql-consumer"
 
