@@ -54,11 +54,11 @@ class dbHandler:
             self.conn.close()
             self.conn = None
 
-    def createTable(self, tableName, tableSchema, dropIfExists = True):
-        """ Create table schema
+    def dropTable(self, tableName, tableSchema, dropIfExists = True):
+        """ Drop table schema
 
             :param tablename:    The table name that is being created
-            :param tableSchema:  Create table syntax as it would be to create it in SQL
+            :param tableSchema:  Drop table syntax as it would be to create it in SQL
             :param dropIfExists: True to drop the table, false to not drop it.
 
             :return: True if the table successfully was created, false otherwise
@@ -74,13 +74,13 @@ class dbHandler:
             self.cursor.execute(tableSchema)
 
         except py.ProgrammingError as err:
-            print("ERROR: Failed to create table - " + str(err))
+            print("ERROR: Failed to drop table - " + str(err))
             #raise err
 
 
         return True
 
-    def createTable(self, tableName, tableSchema, dropIfExists = True):
+    def createTable(self, tableName, tableSchema, createIfExists = True):
         """ Create table schema
 
             :param tablename:    The table name that is being created
@@ -94,7 +94,7 @@ class dbHandler:
             return False
 
         try:
-            if (dropIfExists == True):
+            if (createIfExists == True):
                self.cursor.execute("DROP TABLE IF EXISTS %s" % tableName)
 
             self.cursor.execute(tableSchema)
