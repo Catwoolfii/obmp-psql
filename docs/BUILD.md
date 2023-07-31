@@ -7,24 +7,34 @@ Dependencies
 - Python psycopg2-binary
 - DNS Python
 
+Example install dependencies for consumer:
+
+    sudo apt-get install maven openjdk-17-jdk-headless
+
+Example install dependencies for scripts:
+
+    sudo apt-get install python3-{click,clickhouse-driver,dns,ipaddr,netaddr,pip} whois
+    pip install pubdns requests
 
 Build
 -----
 You can build from source using maven as below:
 
 
-### (1) Install openbmp-java-api-message
-
-    git clone https://github.com/OpenBMP/obmp-java-api-message.git
-    cd obmp-java-api-message
-    mvn clean install
-
 ### (2) Build obmp-psql
 
-    cd ../
-    git clone https://github.com/OpenBMP/obmp-psql.git
-    cd obmp-psql
-    mvn clean package
+    sudo mkdir -p /var/log/obmp-psql && chown www-data. /var/log/obmp-psql
+    sudo mkdir -p /var/lib/obmp-psql && chown www-data. /var/log/obmp-psql
 
-> The above will create a JAR file under **target/**.  The JAR file is the complete package, which includes the dependancies. 
+    wget -O obmp-psql.tar.gz https://github.com/Catwoolfii/obmp-psql/archive/refs/heads/main.tar.gz
+    sudo tar zxvf obmp-psql.tar.gz
+    cd obmp-psql-main
+    sudo mvn clean package
 
+    cp target/obmp-psql-consumer-0.1.0-SNAPSHOT.jar /var/lib/obmp-psql/
+    cp src/main/resources/obmp-psql.yml /var/lib/obmp-psql/
+    cp src/main/resources/log4j.yml /var/lib/obmp-psql/
+    cp src/main/resources/obmp-psql /etc/default/
+    cp src/main/resources/obmp-psql.service /etc/systemd/system/
+
+    sudo systemctl enable obmp-psql.service
