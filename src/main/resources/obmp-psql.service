@@ -17,6 +17,7 @@ Restart=always
 RestartSec=10
 WorkingDirectory=/var/lib/obmp-psql
 SyslogIdentifier=obmp-psql
+SyslogLevel=warning
 LimitNOFILE=16384
 
 # When stopping, how long to wait before giving up and sending SIGKILL?
