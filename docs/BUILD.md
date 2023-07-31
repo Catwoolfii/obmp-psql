@@ -9,7 +9,7 @@ Dependencies
 
 Example install dependencies for consumer:
 
-    sudo apt-get install maven openjdk-17-jdk-headless
+    sudo apt-get install maven openjdk-11-jre-headless
 
 Example install dependencies for scripts:
 
