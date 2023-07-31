@@ -1,0 +1,6 @@
+CONFIG=obmp-psql.yml
+JAR=obmp-psql-consumer-0.1.0-SNAPSHOT.jar
+JAVA_OPTS="-Xmx2g -Xms128m -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions \
+-XX:InitiatingHeapOccupancyPercent=30 -XX:G1MixedGCLiveThresholdPercent=30 \
+-XX:MaxGCPauseMillis=200 -XX:ParallelGCThreads=20 -XX:ConcGCThreads=5 \
+-Duser.timezone=UTC -Dlog4j.configurationFile=log4j2.yml"
