@@ -3,13 +3,21 @@ Configuration:
 
   Appenders:
     Console:
-      name: Console
+      name: STDOUT
       target: SYSTEM_OUT
       PatternLayout:
         Pattern: "%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg%n"
 
   Loggers:
+    Logger:
+      name: org.apache.kafka.clients.consumer
+      level: warn
+      additivity: false
+      AppenderRef:
+        ref: STDOUT
+
     Root:
       level: warn
+      additivity: false
       AppenderRef:
-        ref: Console
+        ref: STDOUT
